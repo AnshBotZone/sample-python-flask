@@ -1,16 +1,19 @@
-import os
-import psutil
 import datetime
-from speedtest import Speedtest, ConfigRetrievalError
+
+import psutil
+from speedtest import ConfigRetrievalError, Speedtest
+
 
 def get_stats():
-    boot_time = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+    boot_time = datetime.datetime.fromtimestamp(psutil.boot_time()).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
     cpu_cores = psutil.cpu_count()
     cpu_frequency = psutil.cpu_freq().current
     cpu_usage = psutil.cpu_percent(interval=1)
     virtual_mem = psutil.virtual_memory()
     swap_mem = psutil.swap_memory()
-    disk = psutil.disk_usage('/')
+    disk = psutil.disk_usage("/")
     net_io = psutil.net_io_counters()
 
     html_report = f"""
@@ -94,14 +97,15 @@ def get_stats():
 """
     return html_report
 
+
 def get_speed_test():
-  try:
-    st = Speedtest()
-    st.get_best_server()
-    st.download()
-    st.upload()
-    results_dict = st.results.dict()
-    img = results_dict['share']
-    return img
-  except ConfigRetrievalError:
-    return "Error"
+    try:
+        st = Speedtest()
+        st.get_best_server()
+        st.download()
+        st.upload()
+        results_dict = st.results.dict()
+        img = results_dict["share"]
+        return img
+    except ConfigRetrievalError:
+        return "Error"
